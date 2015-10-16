@@ -1,0 +1,13 @@
+---
+# This is your subscription id (the type of account you have)
+azure_subscription_id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+
+# Unused, as python azure library doesn't use certs (I think)
+# azure_management_cert_path: "./"
+
+# These variables are generated from creating an azure project
+azure_client_id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+azure_client_secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="
+
+# This is found at the bottom of the online Portal
+azure_oauth_endpoint: "https://login.windows.net/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/oauth2/token"

@@ -6,6 +6,31 @@
     include_vars: extra_vars/azure_vars.yml
   - name: Include shared variables
     include_vars: extra_vars/shared.yml
+  - name: remove a virtual machine
+    azure-virtual-machine:
+      group_name: "{{ group_name }}"
+      state: absent
+      region: "{{ region }}"
+      computer_name: "{{ computer_name }}"
+      vm_name: "{{ vm_name }}"
+      storage_name: "{{ storage_name }}"
+      virtual_network_name: "{{ virtual_network_name }}"
+      subnet_name: "{{ subnet_name }}"
+      public_ip_name: "{{ public_ip_name }}"
+      os_disk_name: "{{ os_disk_name }}"
+      virtual_machine_size_type: "{{ virtual_machine_size_type }}"
+      network_interface_name: "{{ network_interface_name }}"
+      image_offer: "{{ image_offer }}"
+      image_version: "{{ image_version }}"
+      image_publisher: "{{ image_publisher }}"
+      image_sku: "{{ image_sku }}"
+      admin_username: "{{ admin_username }}"
+      admin_password: "{{ admin_password }}"
+      subscription_id: "{{ azure_subscription_id }}"
+      client_id: "{{ azure_client_id }}"
+      client_secret: "{{ azure_client_secret }}"
+      oauth_endpoint: "{{ azure_oauth_endpoint }}"
+    with_sequence: count="{{ cluster_size }}"
   - name: remove a network interface
     azure-network-interface:
       group_name: "{{ group_name }}"
@@ -31,7 +56,7 @@
       client_secret: "{{ azure_client_secret }}"
       oauth_endpoint: "{{ azure_oauth_endpoint }}"
     with_sequence: count="{{ cluster_size }}"
-  - name: remove a virtual_network
+  - name: remove a virtual network
     azure-virtual-network:
       group_name: "{{ group_name }}"
       state: absent

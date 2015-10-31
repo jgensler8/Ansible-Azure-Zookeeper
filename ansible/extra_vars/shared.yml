@@ -1,0 +1,22 @@
+---
+cluster_size: 1
+
+basename: "myclimachine"
+admin_username: "azureadmin"
+admin_password: "admin1234!@#$"
+region: "Central US"
+virtual_machine_size_type: "Basic_A0"
+image_publisher: "Canonical"
+image_offer: "UbuntuServer"
+image_sku: "15.04"
+image_version: "15.04.201508180"
+
+group_name: "{{ basename }}"
+storage_name: "{{ basename }}"
+virtual_network_name: "{{ basename }}"
+subnet_name: "{{ basename }}"
+network_interface_name: "{{ basename }}-{{ item }}"
+vm_name: "{{ basename }}-{{ item }}"
+os_disk_name: "{{ basename }}"
+public_ip_name: "{{ basename }}-{{ item }}"
+computer_name: "{{ basename }}-{{ item }}"

@@ -81,6 +81,9 @@ AZURE_VIRUTAL_MACHINE_SIZE_TYPES = ['ExtraSmall',
                     'Standard_G4',
                     'Standard_G5']
 
+def azure_object_to_json(obj):
+    return json.loads(json.dumps(obj, default=lambda o: o.__dict__))
+
 def create_network_interface(network_client, region, group_name, interface_name,
                              network_name, subnet_name, ip_name):
 
@@ -194,126 +197,41 @@ def get_azure_creds(module):
 
     return SubscriptionCloudCredentials(subscription_id, auth_token)
 
-def terminate_virtual_machine(module, creds):
-    resource_client = azure.mgmt.resource.ResourceManagementClient(creds)
-    storage_client = azure.mgmt.storage.StorageManagementClient(creds)
-    compute_client = azure.mgmt.compute.ComputeManagementClient(creds)
+def delete_ip_address(module, creds):
     network_client = azure.mgmt.network.NetworkResourceProviderClient(creds)
 
-    result = compute_client.virtual_machines.delete(
+    result = network_client.public_ip_addresses.delete(
         module.params.get('group_name'),
-        module.params.get('vm_name')
+        module.params.get('public_ip_name')
     )
 
-    return (False, {}, str(result))
+    return (True, azure_object_to_json(result))
 
-def create_virtual_machine(module, creds):
-    resource_client = azure.mgmt.resource.ResourceManagementClient(creds)
-    storage_client = azure.mgmt.storage.StorageManagementClient(creds)
-    compute_client = azure.mgmt.compute.ComputeManagementClient(creds)
+def create_ip_address(module, creds):
     network_client = azure.mgmt.network.NetworkResourceProviderClient(creds)
 
-    # 1. Create a resource group
-    resource_client.resource_groups.create_or_update(
+    result = network_client.public_ip_addresses.create_or_update(
         module.params.get('group_name'),
-        azure.mgmt.resource.ResourceGroup(
-            location=module.params.get('region'),
-        ),
-    )
-
-    # 2. Create a storage account
-    # TODO: change standard_lrs to other
-    storage_client.storage_accounts.create(
-        module.params.get('group_name'),
-        module.params.get('storage_name'),
-        azure.mgmt.storage.StorageAccountCreateParameters(
-            location=module.params.get('region'),
-            account_type=azure.mgmt.storage.AccountType.standard_lrs,
-        ),
-    )
-
-    # 3. Helper function to get nic_id
-    nic_id = create_network_interface(
-        network_client,
-        module.params.get('region'),
-        module.params.get('group_name'),
-        module.params.get('network_interface_name'),
-        module.params.get('virtual_network_name'),
-        module.params.get('subnet_name'),
         module.params.get('public_ip_name'),
-    )
-
-    # 4. Create Virtual Machine
-    # virtual_machine_size = module.params.get('virtual_machine_size')
-    virtual_machine_size = azure.mgmt.compute.VirtualMachineSizeTypes.standard_a0
-    result = compute_client.virtual_machines.create_or_update(
-        module.params.get('group_name'),
-        azure.mgmt.compute.VirtualMachine(
+        azure.mgmt.network.PublicIpAddress(
             location=module.params.get('region'),
-            name=module.params.get('vm_name'),
-            os_profile=azure.mgmt.compute.OSProfile(
-                admin_username=module.params.get('admin_username'),
-                admin_password=module.params.get('admin_password'),
-                computer_name=module.params.get('computer_name'),
-            ),
-            hardware_profile=azure.mgmt.compute.HardwareProfile(
-                virtual_machine_size=virtual_machine_size
-            ),
-            network_profile=azure.mgmt.compute.NetworkProfile(
-                network_interfaces=[
-                    azure.mgmt.compute.NetworkInterfaceReference(
-                        reference_uri=nic_id,
-                    ),
-                ],
-            ),
-            storage_profile=azure.mgmt.compute.StorageProfile(
-                os_disk=azure.mgmt.compute.OSDisk(
-                    caching=azure.mgmt.compute.CachingTypes.none,
-                    create_option=azure.mgmt.compute.DiskCreateOptionTypes.from_image,
-                    name=module.params.get('os_disk_name'),
-                    virtual_hard_disk=azure.mgmt.compute.VirtualHardDisk(
-                        uri='https://{0}.blob.core.windows.net/vhds/{1}.vhd'.format(
-                            module.params.get('storage_name'),
-                            module.params.get('os_disk_name'),
-                        ),
-                    ),
-                ),
-                image_reference = azure.mgmt.compute.ImageReference(
-                    publisher=module.params.get('image_publisher'),
-                    offer=module.params.get('image_offer'),
-                    sku=module.params.get('image_sku'),
-                    version=module.params.get('image_version'),
-                ),
-            ),
+            public_ip_allocation_method='Dynamic',
+            idle_timeout_in_minutes=4,
         ),
     )
 
-    net_result = network_client.public_ip_addresses.get(module.params.get('group_name'), module.params.get('public_ip_name'))
+    result = network_client.public_ip_addresses.get(module.params.get('group_name'), module.params.get('public_ip_name'))
 
     # we get a tacking operation ID so we should wait for that
-    return (True, net_result.public_ip_address.ip_address, str(result))
+    return (True, azure_object_to_json(result.public_ip_address))
 
 def main():
     module = AnsibleModule(
         argument_spec=dict(
             state=dict(required=True, choices=["absent", "present"]),
             group_name=dict(required=True),
-            storage_name=dict(required=True),
-            virtual_network_name=dict(required=True),
-            subnet_name=dict(required=True),
-            network_interface_name=dict(required=True),
-            vm_name=dict(required=True),
-            os_disk_name=dict(required=True),
             public_ip_name=dict(required=True),
-            computer_name=dict(required=True),
-            admin_username=dict(required=True),
-            admin_password=dict(required=True),
             region=dict(required=True, choices=AZURE_REGIONS),
-            image_publisher=dict(required=True),
-            image_offer=dict(required=True),
-            image_sku=dict(required=True),
-            image_version=dict(required=True),
-            virtual_machine_size_type=dict(required=True, choice=AZURE_VIRUTAL_MACHINE_SIZE_TYPES),
             subscription_id=dict(required=True, no_log=True),
             client_id=dict(required=True, no_log=True),
             client_secret=dict(required=True, no_log=True),
@@ -324,12 +242,11 @@ def main():
     creds = get_azure_creds(module)
 
     if module.params.get('state') == 'absent':
-        (changed, public_ip, deployment) = terminate_virtual_machine(module, creds)
+        (changed, public_ip) = delete_ip_address(module, creds)
     elif module.params.get('state') == 'present':
-        (changed, public_ip, deployment) = create_virtual_machine(module, creds)
+        (changed, public_ip) = create_ip_address(module, creds)
 
-    # module.exit_json(changed=changed, public_dns_name=public_dns_name, deployment=json.loads(json.dumps(deployment, default=lambda o: o.__dict__)))
-    module.exit_json(changed=changed, public_ip=public_ip, deployment=deployment)
+    module.exit_json(changed=changed, public_ip=public_ip)
 
 if __name__ == '__main__':
     main()

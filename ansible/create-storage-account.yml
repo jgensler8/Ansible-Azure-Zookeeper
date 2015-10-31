@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    basename: "myclimachine"
+    region: "Central US"
+  tasks:
+  - name: Include azure variables
+    include_vars: extra_vars/azure_vars.yml
+  - name: Include shared variables
+    include_vars: extra_vars/shared.yml
+  - name: Create a new resouce group in Azure
+    azure-storage-account:
+      group_name: "{{ group_name }}"
+      storage_name: "{{ storage_name }}"
+      state: "present"
+      region: "{{ region }}"
+      subscription_id: "{{ azure_subscription_id }}"
+      client_id: "{{ azure_client_id }}"
+      client_secret: "{{ azure_client_secret }}"
+      oauth_endpoint: "{{ azure_oauth_endpoint }}"
+    register: output
+  - name: debug
+    debug: var=output

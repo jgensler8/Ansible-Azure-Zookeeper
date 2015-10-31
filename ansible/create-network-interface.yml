@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    basename: "myclimachine"
+    region: "Central US"
+  tasks:
+  - name: Include azure variables
+    include_vars: extra_vars/azure_vars.yml
+  - name: Include shared variables
+    include_vars: extra_vars/shared.yml
+  - name: create a network interface
+    azure-network-interface:
+      group_name: "{{ group_name }}"
+      state: "present"
+      region: "{{ region }}"
+      virtual_network_name: "{{ virtual_network_name }}"
+      subnet_name: "{{ subnet_name }}"
+      network_interface_name: "{{ network_interface_name }}"
+      public_ip_name: "{{ public_ip_name }}"
+      subscription_id: "{{ azure_subscription_id }}"
+      client_id: "{{ azure_client_id }}"
+      client_secret: "{{ azure_client_secret }}"
+      oauth_endpoint: "{{ azure_oauth_endpoint }}"
+    with_sequence: count=1
+    register: output
+  - name: debug
+    debug: var=output

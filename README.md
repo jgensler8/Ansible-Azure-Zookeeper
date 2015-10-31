@@ -42,16 +42,7 @@ Brings up a ZK cluster in Azure.
 
 ### Steps
 
-#### 1. Login using azure-cli
-
-```bash
-$ azure login
-#
-# ... and follow the instructions given ...
-#
-```
-
-#### 2. Edit `groupvars/all.yml`
+#### 1. Edit `groupvars/all.yml`
 
 ```yaml
 # inside file
@@ -61,8 +52,7 @@ azure_subscription_id: "..."
 azure_client_id: "..."
 azure_client_secret: "..."
 ```
-
-#### 3. Encrypt `groupvars/all.yml`
+#### 2. Encrypt `groupvars/all.yml`
 
 ```bash
 $ ansible-vault encrypt groupvars/all.yml

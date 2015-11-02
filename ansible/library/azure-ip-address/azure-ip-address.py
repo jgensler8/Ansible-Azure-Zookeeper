@@ -84,70 +84,6 @@ AZURE_VIRUTAL_MACHINE_SIZE_TYPES = ['ExtraSmall',
 def azure_object_to_json(obj):
     return json.loads(json.dumps(obj, default=lambda o: o.__dict__))
 
-def create_network_interface(network_client, region, group_name, interface_name,
-                             network_name, subnet_name, ip_name):
-
-    result = network_client.virtual_networks.create_or_update(
-        group_name,
-        network_name,
-        azure.mgmt.network.VirtualNetwork(
-            location=region,
-            address_space=azure.mgmt.network.AddressSpace(
-                address_prefixes=[
-                    '10.0.0.0/16',
-                ],
-            ),
-            subnets=[
-                azure.mgmt.network.Subnet(
-                    name=subnet_name,
-                    address_prefix='10.0.0.0/24',
-                ),
-            ],
-        ),
-    )
-
-    result = network_client.subnets.get(group_name, network_name, subnet_name)
-    subnet = result.subnet
-
-    result = network_client.public_ip_addresses.create_or_update(
-        group_name,
-        ip_name,
-        azure.mgmt.network.PublicIpAddress(
-            location=region,
-            public_ip_allocation_method='Dynamic',
-            idle_timeout_in_minutes=4,
-        ),
-    )
-
-    result = network_client.public_ip_addresses.get(group_name, ip_name)
-    public_ip_id = result.public_ip_address.id
-
-    result = network_client.network_interfaces.create_or_update(
-        group_name,
-        interface_name,
-        azure.mgmt.network.NetworkInterface(
-            name=interface_name,
-            location=region,
-            ip_configurations=[
-                azure.mgmt.network.NetworkInterfaceIpConfiguration(
-                    name='default',
-                    private_ip_allocation_method=azure.mgmt.network.IpAllocationMethod.dynamic,
-                    subnet=subnet,
-                    public_ip_address=azure.mgmt.network.ResourceId(
-                        id=public_ip_id,
-                    ),
-                ),
-            ],
-        ),
-    )
-
-    result = network_client.network_interfaces.get(
-        group_name,
-        interface_name,
-    )
-
-    return result.network_interface.id
-
 def get_token_from_client_credentials(module, endpoint, client_id, client_secret):
     payload = {
         'grant_type': 'client_credentials',
@@ -220,7 +156,9 @@ def create_ip_address(module, creds):
         ),
     )
 
-    result = network_client.public_ip_addresses.get(module.params.get('group_name'), module.params.get('public_ip_name'))
+    result = network_client.public_ip_addresses.get(
+        module.params.get('group_name'),
+        module.params.get('public_ip_name'))
 
     # we get a tacking operation ID so we should wait for that
     return (True, azure_object_to_json(result.public_ip_address))

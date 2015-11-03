@@ -26,6 +26,7 @@
       image_sku: "{{ image_sku }}"
       admin_username: "{{ admin_username }}"
       admin_password: "{{ admin_password }}"
+      public_keys: "{{ public_keys }}"
       subscription_id: "{{ azure_subscription_id }}"
       client_id: "{{ azure_client_id }}"
       client_secret: "{{ azure_client_secret }}"

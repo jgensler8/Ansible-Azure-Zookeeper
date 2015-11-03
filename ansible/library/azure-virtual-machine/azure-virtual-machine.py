@@ -155,6 +155,11 @@ def create_virtual_machine(module, creds):
     # virtual_machine_size = module.params.get('virtual_machine_size')
     virtual_machine_size = azure.mgmt.compute.VirtualMachineSizeTypes.standard_a0
 
+    ssh_keys = map(lambda data: azure.mgmt.compute.SshPublicKey(
+        key_data=data,
+        path="/home/" + module.params.get('admin_username') + "/.ssh/authorized_keys"
+    ), module.params.get('public_keys') )
+
     result = compute_client.virtual_machines.create_or_update(
         module.params.get('group_name'),
         azure.mgmt.compute.VirtualMachine(
@@ -164,6 +169,12 @@ def create_virtual_machine(module, creds):
                 admin_username=module.params.get('admin_username'),
                 admin_password=module.params.get('admin_password'),
                 computer_name=module.params.get('computer_name'),
+                linux_configuration=azure.mgmt.compute.LinuxConfiguration(
+                    ssh_configuration=azure.mgmt.compute.SshConfiguration(
+                        disable_password_authentication=True,
+                        public_keys=ssh_keys
+                    )
+                )
             ),
             hardware_profile=azure.mgmt.compute.HardwareProfile(
                 virtual_machine_size=virtual_machine_size
@@ -220,6 +231,7 @@ def main():
             computer_name=dict(required=True),
             admin_username=dict(required=True),
             admin_password=dict(required=True),
+            public_keys=dict(required=True),
             region=dict(required=True, choices=AZURE_REGIONS),
             image_publisher=dict(required=True),
             image_offer=dict(required=True),

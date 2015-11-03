@@ -2,9 +2,9 @@
 - hosts: localhost
   connection: local
   tasks:
-  - name: Include azure variables
+  - name: include azure variables
     include_vars: extra_vars/azure_vars.yml
-  - name: Include shared variables
+  - name: include shared variables
     include_vars: extra_vars/shared.yml
   - name: create resource group
     azure-resource-group:
@@ -47,6 +47,7 @@
       client_secret: "{{ azure_client_secret }}"
       oauth_endpoint: "{{ azure_oauth_endpoint }}"
     with_sequence: count="{{ cluster_size }}"
+    register: list_azure_ips
   - name: create a network interface
     azure-network-interface:
       group_name: "{{ group_name }}"
@@ -61,7 +62,7 @@
       client_secret: "{{ azure_client_secret }}"
       oauth_endpoint: "{{ azure_oauth_endpoint }}"
     with_sequence: count="{{ cluster_size }}"
-  - name: Create a virtual machine
+  - name: create a virtual machine
     azure-virtual-machine:
       group_name: "{{ group_name }}"
       state: "present"
@@ -81,22 +82,21 @@
       image_sku: "{{ image_sku }}"
       admin_username: "{{ admin_username }}"
       admin_password: "{{ admin_password }}"
+      public_keys: "{{ public_keys }}"
       subscription_id: "{{ azure_subscription_id }}"
       client_id: "{{ azure_client_id }}"
       client_secret: "{{ azure_client_secret }}"
       oauth_endpoint: "{{ azure_oauth_endpoint }}"
     with_sequence: count="{{ cluster_size }}"
-  # - name: debug
-  #   debug: var=output
-  # - name: add hosts to inventory
-  #   add_host: name={{ item.public_ip }} group=azure ansible_ssh_pass=admin1234!@#$
-  #   with_items: output.results
+  - name: add hosts to inventory
+    add_host: name={{ item.public_ip._dns_settings._fqdn }} group=azure
+    with_items: list_azure_ips.results
 
-# - hosts: azure
-#   remote_user: "azureadmin"
-#   tasks:
-#   - name: whoami
-#     raw: whoami
-#     register: output
-#   - name: debug whoami
-#     debug: var=output
+- hosts: azure
+  remote_user: "azureadmin"
+  tasks:
+  - name: whoami
+    raw: whoami
+    register: output
+  - name: debug whoami
+    debug: var=output

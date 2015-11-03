@@ -152,6 +152,9 @@ def create_ip_address(module, creds):
         azure.mgmt.network.PublicIpAddress(
             location=module.params.get('region'),
             public_ip_allocation_method='Dynamic',
+            dns_settings=azure.mgmt.network.PublicIpAddressDnsSettings(
+                    domain_name_label=module.params.get('public_ip_name')
+            ),
             idle_timeout_in_minutes=4,
         ),
     )

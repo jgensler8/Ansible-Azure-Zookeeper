@@ -1,3 +1,4 @@
 ---
 - include: spinup.yml
 - include: run-jmeter.yml
+- include: spindown.yml

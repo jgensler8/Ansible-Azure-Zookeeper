@@ -1,0 +1,6 @@
+---
+# defaults file for jmeter
+jmeter_version: 2.13
+jmeter_archive: "apache-jmeter-{{ jmeter_version }}.zip"
+jmeter_src: "http://mirror.metrocast.net/apache//jmeter/binaries/{{ jmeter_archive }}"
+jmeter_dest: "/tmp"

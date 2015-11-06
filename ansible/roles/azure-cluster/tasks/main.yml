@@ -1,0 +1,7 @@
+---
+# tasks file for azure-cluster
+- include: spinup.yml
+  when: state == "present"
+
+- include: spindown.yml
+  when: state == "absent"

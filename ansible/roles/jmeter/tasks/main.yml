@@ -1,0 +1,7 @@
+---
+# tasks file for jmeter
+- name: unarchive jmeter
+  unarchive:
+    src: "{{ jmeter_src }}"
+    dest: "{{ jmeter_dest }}"
+    copy: no

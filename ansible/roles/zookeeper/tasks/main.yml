@@ -1,0 +1,54 @@
+---
+# tasks file for zookeeper
+
+# - name: update the apt cache (apt-get update)
+#   apt: update_cache=yes
+#   become: yes
+#   become_method: sudo
+#
+# - name: download default jre
+#   apt:
+#     name: default-jre
+#     state: present
+#   become: yes
+#   become_method: sudo
+#
+# - name: download zookeeper jar
+#   get_url:
+#     url: "{{ zookeeper_src }}"
+#     dest: "{{ zookeeper_get_url_dest }}"
+#
+# - name: unpack zookeeper
+#   unarchive:
+#     src: "{{ zookeeper_get_url_dest }}"
+#     dest: "{{ zookeeper_unarchive_dest }}"
+#     copy: no
+
+# - name: template service file
+#   template:
+#     src: zookeeper.service.j2
+#     dest: /tmp/zookeeper.service
+
+- name: template zoo.cfg
+  template:
+    src: zoo.cfg.j2
+    dest: "{{ zookeeper_root }}/conf/zoo.cfg"
+  notify:
+  - restart zookeeper
+
+# - name: ensure zookeeper_data_dir exists
+#   file:
+#     path: "{{ zookeeper_data_dir }}"
+#     state: directory
+#     mode: 0755
+#   become: yes
+#   become_method: sudo
+#
+# - name: write myid file
+#   template:
+#     src: myid.j2
+#     dest: "{{ zookeeper_data_dir }}/myid"
+#   become: yes
+#   become_method: sudo
+#   notify:
+#   - restart zookeeper

@@ -1,26 +1,19 @@
 ---
-cluster_size: 1
 
-# Unfortunatley, I have a variable here for the username but it can't be
-# substituted because its in this file
-admin_username: "azureadmin"
-admin_password: "admin1234!@#$"
+cluster_group_name: "zookeeper-jmeter"
+cluster_virtual_network_name: "{{ cluster_group_name}}-vnet"
+cluster_subnet_name: "{{ cluster_group_name }}-subnet"
 
-region: "Central US"
+##
+#
+# keep in mind that the basename should be unique to the whole world. Think of it like your email.
+#
+##
 
-virtual_machine_size_type: "Basic_A0"
-image_publisher: "Canonical"
-image_offer: "UbuntuServer"
-image_sku: "15.04"
-image_version: "15.04.201508180"
+zookeeper_cluster_size: 3
+zookeeper_basename: "myzookeeper"
+zookeeper_group: "zookeeper"
 
-basename: "myclimachine"
-group_name: "{{ basename }}"
-storage_name: "{{ basename }}"
-virtual_network_name: "{{ basename }}"
-subnet_name: "{{ basename }}"
-os_disk_name: "{{ basename }}"
-network_interface_name: "{{ basename }}-{{ item }}"
-public_ip_name: "{{ basename }}-{{ item }}"
-vm_name: "{{ basename }}-{{ item }}"
-computer_name: "{{ basename }}-{{ item }}"
+jmeter_cluster_size: 1
+jmeter_basename: "myjmeter"
+jmeter_group: "jmeter"

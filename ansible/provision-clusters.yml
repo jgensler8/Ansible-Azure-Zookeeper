@@ -1,0 +1,14 @@
+---
+- hosts: "{{ zookeeper_group }}"
+  remote_user: azureadmin
+  vars_files:
+  - extra_vars/shared.yml
+  roles:
+  - role: zookeeper
+
+# - hosts: "{{ jmeter_group }}"
+#   remote_user: azureadmin
+#   vars_files:
+#   - extra_vars/shared.yml
+#   roles:
+#   - jmeter

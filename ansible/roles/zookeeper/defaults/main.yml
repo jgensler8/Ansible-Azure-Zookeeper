@@ -1,0 +1,12 @@
+---
+# defaults file for zookeeper
+
+zookeeper_file_base: zookeeper-3.4.6
+zookeeper_file: "{{ zookeeper_file_base }}.tar.gz"
+zookeeper_version: stable/{{ zookeeper_file }}
+zookeeper_src: http://apache.mirrors.lucidnetworks.net/zookeeper/{{ zookeeper_version }}
+zookeeper_get_url_dest: /tmp/{{ zookeeper_file }}
+zookeeper_unarchive_dest: /tmp
+zookeeper_root: "{{ zookeeper_unarchive_dest }}/{{ zookeeper_file_base }}"
+
+zookeeper_data_dir: /var/lib/zookeeper

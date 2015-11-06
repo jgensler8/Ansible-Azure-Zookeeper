@@ -133,59 +133,69 @@ def get_azure_creds(module):
 
     return SubscriptionCloudCredentials(subscription_id, auth_token)
 
-def delete_virtual_network(module, creds):
+def delete_network_security_group(module, creds):
     network_client = azure.mgmt.network.NetworkResourceProviderClient(creds)
 
-    result = network_client.virtual_networks.delete(
+    result = network_client.network_security_groups.delete(
         module.params.get('group_name'),
-        module.params.get('virtual_network_name')
+        module.params.get('network_security_group_name')
     )
 
     return (True, azure_object_to_json(result))
 
-def create_virtual_network(module, creds):
+def create_network_security_group(module, creds):
     network_client = azure.mgmt.network.NetworkResourceProviderClient(creds)
 
-    network_security_group = network_client.network_security_groups.get(
+    security_rules = map(lambda rule_obj:
+        azure.mgmt.network.SecurityRule(
+            access="Allow",
+            description="Some Description",
+            destination_address_prefix="*",
+            destination_port_range="2888",
+            direction="Inbound",
+            priority="150",
+            protocol="*",
+            source_address_prefix="*",
+            source_port_range="*",
+        )
+    , module.params.get('security_rules'))
+
+    result = network_client.network_security_groups.create_or_update(
         module.params.get('group_name'),
         module.params.get('network_security_group_name'),
-    ).network_security_group
-
-    result = network_client.virtual_networks.create_or_update(
-        module.params.get('group_name'),
-        module.params.get('virtual_network_name'),
-        azure.mgmt.network.VirtualNetwork(
+        azure.mgmt.network.NetworkSecurityGroup(
             location=module.params.get('region'),
-            address_space=azure.mgmt.network.AddressSpace(
-                address_prefixes=[
-                    '10.0.0.0/16',
-                ],
-            ),
-            subnets=[
-                azure.mgmt.network.Subnet(
-                    name=module.params.get('subnet_name'),
-                    address_prefix='10.0.0.0/24',
-                    network_security_group=network_security_group
-                ),
+            security_rules=[
+                # azure.mgmt.network.SecurityRule(
+                #     access="Allow",
+                #     description="Some Description",
+                #     destination_address_prefix="*",
+                #     destination_port_range="2888",
+                #     direction="Inbound",
+                #     priority="150",
+                #     protocol="*",
+                #     source_address_prefix="*",
+                #     source_port_range="*",
+                # )
             ],
-        ),
+        )
     )
 
-    result = network_client.virtual_networks.get(
+    result = network_client.network_security_groups.get(
         module.params.get('group_name'),
-        module.params.get('virtual_network_name')
+        module.params.get('network_security_group_name')
     )
 
-    return (True, azure_object_to_json(result.virtual_network))
+    # we get a tacking operation ID so we should wait for that
+    return (True, azure_object_to_json(result.network_security_group))
 
 def main():
     module = AnsibleModule(
         argument_spec=dict(
             state=dict(required=True, choices=["absent", "present"]),
             group_name=dict(required=True),
-            virtual_network_name=dict(required=True),
-            subnet_name=dict(required=True),
             network_security_group_name=dict(required=True),
+            security_rules=dict(required=True),
             region=dict(required=True, choices=AZURE_REGIONS),
             subscription_id=dict(required=True, no_log=True),
             client_id=dict(required=True, no_log=True),
@@ -197,12 +207,12 @@ def main():
     creds = get_azure_creds(module)
 
     if module.params.get('state') == 'absent':
-        (changed, virtual_network) = delete_virtual_network(module, creds)
+        (changed, network_interface) = delete_network_security_group(module, creds)
     elif module.params.get('state') == 'present':
-        (changed, virtual_network) = create_virtual_network(module, creds)
+        (changed, network_interface) = create_network_security_group(module, creds)
 
     # module.exit_json(changed=changed, public_dns_name=public_dns_name, deployment=json.loads(json.dumps(deployment, default=lambda o: o.__dict__)))
-    module.exit_json(changed=changed, virtual_network=virtual_network)
+    module.exit_json(changed=changed, network_interface=network_interface)
 
 if __name__ == '__main__':
     main()

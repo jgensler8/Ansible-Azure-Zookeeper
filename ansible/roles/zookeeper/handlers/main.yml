@@ -1,0 +1,7 @@
+---
+# handlers file for zookeeper
+
+- name: restart zookeeper
+  shell:
+    free_form: sudo bin/zkServer.sh restart
+    chdir: "{{ zookeeper_root }}"

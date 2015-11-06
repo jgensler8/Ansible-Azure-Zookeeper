@@ -1,0 +1,96 @@
+---
+# tasks file for azure-cluster
+- name: create resource group
+  azure-resource-group:
+    state: present
+    region: "{{ region }}"
+    group_name: "{{ group_name }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    client_id: "{{ azure_client_id }}"
+    client_secret: "{{ azure_client_secret }}"
+    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+- name: create storage account
+  azure-storage-account:
+    state: present
+    region: "{{ region }}"
+    group_name: "{{ group_name }}"
+    storage_name: "{{ storage_name }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    client_id: "{{ azure_client_id }}"
+    client_secret: "{{ azure_client_secret }}"
+    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+- name: create a network security group
+  azure-network-security-group:
+    group_name: "{{ group_name }}"
+    state: "present"
+    region: "{{ region }}"
+    network_security_group_name: "{{ network_security_group_name }}"
+    security_rules: "{{ security_rules }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    client_id: "{{ azure_client_id }}"
+    client_secret: "{{ azure_client_secret }}"
+    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+- name: create a virtual network
+  azure-virtual-network:
+    group_name: "{{ group_name }}"
+    state: "present"
+    region: "{{ region }}"
+    virtual_network_name: "{{ virtual_network_name }}"
+    subnet_name: "{{ subnet_name }}"
+    network_security_group_name: "{{ network_security_group_name }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    client_id: "{{ azure_client_id }}"
+    client_secret: "{{ azure_client_secret }}"
+    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+- name: create a public ip
+  azure-ip-address:
+    group_name: "{{ group_name }}"
+    state: "present"
+    region: "{{ region }}"
+    public_ip_name: "{{ public_ip_name }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    client_id: "{{ azure_client_id }}"
+    client_secret: "{{ azure_client_secret }}"
+    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+  with_sequence: count="{{ cluster_size }}"
+  register: list_azure_ips
+- name: create a network interface
+  azure-network-interface:
+    group_name: "{{ group_name }}"
+    state: "present"
+    region: "{{ region }}"
+    virtual_network_name: "{{ virtual_network_name }}"
+    subnet_name: "{{ subnet_name }}"
+    network_interface_name: "{{ network_interface_name }}"
+    public_ip_name: "{{ public_ip_name }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    client_id: "{{ azure_client_id }}"
+    client_secret: "{{ azure_client_secret }}"
+    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+  with_sequence: count="{{ cluster_size }}"
+- name: create a virtual machine
+  azure-virtual-machine:
+    group_name: "{{ group_name }}"
+    state: "present"
+    region: "{{ region }}"
+    computer_name: "{{ computer_name }}"
+    vm_name: "{{ vm_name }}"
+    storage_name: "{{ storage_name }}"
+    virtual_network_name: "{{ virtual_network_name }}"
+    subnet_name: "{{ subnet_name }}"
+    public_ip_name: "{{ public_ip_name }}"
+    os_disk_name: "{{ os_disk_name }}"
+    virtual_machine_size_type: "{{ virtual_machine_size_type }}"
+    network_interface_name: "{{ network_interface_name }}"
+    image_offer: "{{ image_offer }}"
+    image_version: "{{ image_version }}"
+    image_publisher: "{{ image_publisher }}"
+    image_sku: "{{ image_sku }}"
+    admin_username: "{{ admin_username }}"
+    admin_password: "{{ admin_password }}"
+    public_keys: "{{ public_keys }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    client_id: "{{ azure_client_id }}"
+    client_secret: "{{ azure_client_secret }}"
+    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+  with_sequence: count="{{ cluster_size }}"

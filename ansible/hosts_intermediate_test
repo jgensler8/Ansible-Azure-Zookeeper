@@ -1,0 +1,7 @@
+[zookeeper]
+myzookeeper-1-ip.centralus.cloudapp.azure.com zookeeper_node_id=1
+myzookeeper-2-ip.centralus.cloudapp.azure.com zookeeper_node_id=2
+myzookeeper-3-ip.centralus.cloudapp.azure.com zookeeper_node_id=3
+
+[jmeter]
+myjmeter-1-ip.centralus.cloudapp.azure.com

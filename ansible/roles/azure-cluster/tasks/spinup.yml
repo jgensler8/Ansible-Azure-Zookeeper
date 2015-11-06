@@ -19,17 +19,17 @@
     client_id: "{{ azure_client_id }}"
     client_secret: "{{ azure_client_secret }}"
     oauth_endpoint: "{{ azure_oauth_endpoint }}"
-- name: create a network security group
-  azure-network-security-group:
-    group_name: "{{ group_name }}"
-    state: "present"
-    region: "{{ region }}"
-    network_security_group_name: "{{ network_security_group_name }}"
-    security_rules: "{{ security_rules }}"
-    subscription_id: "{{ azure_subscription_id }}"
-    client_id: "{{ azure_client_id }}"
-    client_secret: "{{ azure_client_secret }}"
-    oauth_endpoint: "{{ azure_oauth_endpoint }}"
+# - name: create a network security group
+#   azure-network-security-group:
+#     group_name: "{{ group_name }}"
+#     state: "present"
+#     region: "{{ region }}"
+#     network_security_group_name: "{{ network_security_group_name }}"
+#     security_rules: "{{ security_rules }}"
+#     subscription_id: "{{ azure_subscription_id }}"
+#     client_id: "{{ azure_client_id }}"
+#     client_secret: "{{ azure_client_secret }}"
+#     oauth_endpoint: "{{ azure_oauth_endpoint }}"
 - name: create a virtual network
   azure-virtual-network:
     group_name: "{{ group_name }}"

@@ -1,0 +1,3 @@
+---
+# defaults file for jmeter-testrun
+jmeter_testrun_root: "/tmp"

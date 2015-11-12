@@ -10,6 +10,8 @@ cluster_subnet_name: "{{ cluster_group_name }}-subnet"
 #
 ##
 
+admin_username: azureadmin
+
 zookeeper_cluster_size: 3
 zookeeper_basename: "myzookeeper"
 zookeeper_group: "zookeeper"
@@ -17,3 +19,6 @@ zookeeper_group: "zookeeper"
 jmeter_cluster_size: 1
 jmeter_basename: "myjmeter"
 jmeter_group: "jmeter"
+
+test_plan:
+- list

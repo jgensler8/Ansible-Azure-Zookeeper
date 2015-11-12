@@ -1,0 +1,7 @@
+---
+- hosts: "{{ jmeter_group }}"
+  remote_user: "{{ admin_username }}"
+  vars_files:
+  - extra_vars/shared.yml
+  roles:
+  - role: jmeter-testrun

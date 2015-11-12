@@ -1,23 +1,24 @@
-Role Name
+jmeter-testrun
 =========
 
-Downloads JMeter from a url.
+Template a load test and run against a set of hosts
 
 Requirements
 ------------
 
-No prerequisites.
+Requires JMeter to be installed and locatable at a varible named `jmeter_root`
 
 Role Variables
 --------------
 
-Variables Exposed:
-* `jmeter_root` who's root holds .jars necessary to run JMeter
+Required:
+* `jmeter_root`
+* `test_plan` a complex object containing a JMeter JMX
 
 Dependencies
 ------------
 
-No Dependencies.
+* jmeter (jgensler8)
 
 Example Playbook
 ----------------
@@ -36,4 +37,4 @@ BSD
 Author Information
 ------------------
 
-Jeffrey Gensler (jgensl2@uic.edu)
+An optional section for the role authors to include contact information, or a website (HTML is not allowed).

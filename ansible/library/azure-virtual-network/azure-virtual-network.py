@@ -165,7 +165,7 @@ def create_virtual_network(module, creds):
                 azure.mgmt.network.Subnet(
                     name=module.params.get('subnet_name'),
                     address_prefix='10.0.0.0/24',
-                    network_security_group=network_security_group
+                    # network_security_group=network_security_group
                 ),
             ],
         ),
@@ -185,7 +185,7 @@ def main():
             group_name=dict(required=True),
             virtual_network_name=dict(required=True),
             subnet_name=dict(required=True),
-            network_security_group_name=dict(required=True),
+            # network_security_group_name=dict(required=True),
             region=dict(required=True, choices=AZURE_REGIONS),
             subscription_id=dict(required=True, no_log=True),
             client_id=dict(required=True, no_log=True),

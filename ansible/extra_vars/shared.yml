@@ -19,6 +19,3 @@ zookeeper_group: "zookeeper"
 jmeter_cluster_size: 1
 jmeter_basename: "myjmeter"
 jmeter_group: "jmeter"
-
-test_plan:
-- list

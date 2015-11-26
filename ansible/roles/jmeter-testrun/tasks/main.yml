@@ -2,11 +2,11 @@
 # tasks file for jmeter-testrun
 - name: template the test_plan
   template:
-    src: "jmx_base.xml.j2"
-    dest: "{{ jmeter_testrun_root }}/jmx_base.xml"
+    src: "jmx_base.jmx.j2"
+    dest: "{{ jmeter_testrun_root }}/jmx_base.jmx"
 
 - name: run jmeter
   command: echo "running jmeter"
 
 - name: log jmeter to somewhere
-  commnd: echo "logging to logstash"
+  command: echo "logging to logstash"

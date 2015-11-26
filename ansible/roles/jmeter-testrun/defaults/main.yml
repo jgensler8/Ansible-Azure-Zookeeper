@@ -1,3 +1,5 @@
 ---
 # defaults file for jmeter-testrun
 jmeter_testrun_root: "/tmp"
+
+jmeter_version: 2.13

@@ -1,12 +1,21 @@
 ---
 # tasks file for jmeter-testrun
+
+- name: remove old results.csv
+  file:
+    path: /tmp/results.csv
+    state: absent
+
 - name: template the test_plan
   template:
     src: "jmx_base.jmx.j2"
-    dest: "{{ jmeter_testrun_root }}/jmx_base.jmx"
+    dest: "/tmp/jmx_base.jmx"
+
+- name: template the properties file
+  template:
+    src: "user.properties.j2"
+    dest: "/tmp/user.properties"
 
 - name: run jmeter
-  command: /tmp/apache-jmeter-2.13/bin/jmeter -n -t /tmp/jmx_base.jmx -l /tmp/results.csv
-
-- name: restart logstash?
-  command: echo "logging to logstash"
+  command: "{{ jmeter_executable }} -n -t /tmp/jmx_base.jmx -p /tmp/user.properties -l /tmp/results.csv"
+  notify: Restart logstash

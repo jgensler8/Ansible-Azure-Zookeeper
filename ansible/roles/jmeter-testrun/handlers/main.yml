@@ -1,2 +1,7 @@
 ---
 # handlers file for jmeter-testrun
+- name: Restart logstash
+  service:
+    name=logstash
+    state=restarted
+  sudo: yes

@@ -1,0 +1,30 @@
+---
+# tasks file for zookeeper-rest
+
+- name: install ant
+  apt:
+    name: ant
+    state: present
+  sudo: yes
+
+- name: install javac
+  apt:
+    name: default-jdk
+    state: present
+  sudo: yes
+
+- name: build zookeeper (it is needed by the rest server)
+  command: ant -f /tmp/zookeeper-3.4.6/build.xml
+
+- name: copy zookeeper rest service file
+  copy:
+    src: "zookeeper-rest.service"
+    dest: /etc/systemd/system/
+  sudo: yes
+
+- name: enable the service
+  service:
+    name: zookeeper-rest.service
+    enabled: yes
+    state: started
+  sudo: yes

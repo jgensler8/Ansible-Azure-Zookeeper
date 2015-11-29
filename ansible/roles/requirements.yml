@@ -1,5 +1,0 @@
-
-- src: Stouts.logstash
-  path: ./
-- src: bakhti.elk
-  path: ./

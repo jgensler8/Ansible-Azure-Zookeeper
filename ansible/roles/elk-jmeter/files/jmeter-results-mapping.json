@@ -6,11 +6,19 @@
         "index.refresh_interval": "5s"
     },
     "mappings": {
-        "logs": {
+    "jmeter": {
             "properties": {
+                "host": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
                 "time": {
-                    "type": "date",
-		    "format": "yyyy-MM-dd HH:mm:ss.SSS"
+                    "type": "date"
                 },
                 "elapsed": {
                     "type": "long"
@@ -21,17 +29,17 @@
                 "responseCode": {
                     "type": "integer"
                 },
+                "success": {
+                    "type": "string"
+                },
                 "threadName": {
                     "type": "string"
                 },
-                "success": {
-                    "type": "boolean"
-                },
                 "bytes": {
-                    "type": "long"
+                    "type": "string"
                 },
                 "grpThreads": {
-                    "type": "long"
+                    "type": "boolean"
                 },
                 "allThreads": {
                     "type": "long"
@@ -44,9 +52,6 @@
                 },
                 "ErrorCount": {
                     "type": "long"
-                },
-                "Hostname": {
-                    "type": "string"
                 }
             }
         }

@@ -1,5 +1,6 @@
 ---
 # defaults file for jmeter-testrun
-jmeter_testrun_root: "/tmp"
-
-jmeter_version: 2.13
+jmeter_executable: "jmeter"
+jmeter_testrun_properties:
+- key: jmeter.save.saveservice.timestamp_format
+  value: yyyy-MM-dd'T'HH:mm:ss.SSS

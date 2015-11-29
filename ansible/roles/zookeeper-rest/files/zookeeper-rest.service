@@ -1,0 +1,11 @@
+[Unit]
+Description=Zookeeper Rest Ant Service
+#Requires=zookeeper.service
+AssertPathExists=/tmp/zookeeper-3.4.6/src/contrib/rest/
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ant -f /tmp/zookeeper-3.4.6/src/contrib/rest/build.xml run
+
+[Install]
+WantedBy=multi-user.target

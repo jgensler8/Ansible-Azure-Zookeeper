@@ -5,7 +5,7 @@
   - extra_vars/shared.yml
   roles:
   - role: jmeter-testrun
-    jmeter_testrun_root: /tmp
+    jmeter_executable: /opt/apache-jmeter-2.13/bin/jmeter
     test_plan:
       name: MyTestPlan
       variables:
@@ -18,7 +18,7 @@
           continue_forever: false
           loops: 10
         num_threads: 10
-        ramp_time: 3
+        ramp_time: 10
         tree:
         - type: HTTPSamplerProxy
           name: ZOOKEEPERREST

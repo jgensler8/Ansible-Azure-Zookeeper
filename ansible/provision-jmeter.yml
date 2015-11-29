@@ -6,6 +6,9 @@
   roles:
   - role: logstash
     elk_logstash:
+      version: 2.1
+      pid_file: /var/run/logstash.pid
+      patterns: [] # optional; follows same format as `configs`
       configs:
       - src: 5-jmeter-results.conf
         dest: 5-jmeter-results.conf

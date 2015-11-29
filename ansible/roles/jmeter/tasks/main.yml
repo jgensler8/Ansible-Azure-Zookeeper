@@ -1,25 +1,29 @@
 ---
 # tasks file for jmeter
 
-- name: update the apt cache (apt-get update)
-  apt: update_cache=yes
-  become: yes
-  become_method: sudo
+# jre is installed from logstash
 
-- name: download default jre
-  apt:
-    name: default-jre
-    state: present
-  become: yes
-  become_method: sudo
+# - name: update the apt cache (apt-get update)
+#   apt: update_cache=yes
+#   become: yes
+#   become_method: sudo
+
+# - name: download default jre
+#   apt:
+#     name: default-jre
+#     state: present
+#   become: yes
+#   become_method: sudo
 
 - name: download jmeter
   get_url:
     url: "{{ jmeter_src }}"
     dest: "{{ jmeter_get_url_dest }}"
+  sudo: yes
 
 - name: unpack jmeter
   unarchive:
     src: "{{ jmeter_get_url_dest_file }}"
     dest: "{{ jmeter_unarchive_dest }}"
     copy: no
+  sudo: yes

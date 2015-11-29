@@ -4,4 +4,5 @@
   vars_files:
   - extra_vars/shared.yml
   roles:
-  - role: zookeeper
+  # - role: zookeeper
+  - role: zookeeper-rest

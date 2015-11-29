@@ -1,0 +1,12 @@
+---
+- hosts: "{{ elk_group }}"
+  remote_user: "{{ admin_username }}"
+  vars_files:
+  - extra_vars/shared.yml
+  pre_tasks:
+  - name: fix apt-get update
+    apt: update_cache=yes
+    sudo: yes
+  roles:
+  - role: elk-jmeter
+    sudo: yes

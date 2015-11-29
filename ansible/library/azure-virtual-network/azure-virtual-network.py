@@ -146,10 +146,10 @@ def delete_virtual_network(module, creds):
 def create_virtual_network(module, creds):
     network_client = azure.mgmt.network.NetworkResourceProviderClient(creds)
 
-    network_security_group = network_client.network_security_groups.get(
-        module.params.get('group_name'),
-        module.params.get('network_security_group_name'),
-    ).network_security_group
+    # network_security_group = network_client.network_security_groups.get(
+    #     module.params.get('group_name'),
+    #     module.params.get('network_security_group_name'),
+    # ).network_security_group
 
     result = network_client.virtual_networks.create_or_update(
         module.params.get('group_name'),
@@ -185,7 +185,7 @@ def main():
             group_name=dict(required=True),
             virtual_network_name=dict(required=True),
             subnet_name=dict(required=True),
-            # network_security_group_name=dict(required=True),
+            network_security_group_name=dict(required=True),
             region=dict(required=True, choices=AZURE_REGIONS),
             subscription_id=dict(required=True, no_log=True),
             client_id=dict(required=True, no_log=True),

@@ -166,17 +166,17 @@ def create_network_security_group(module, creds):
         azure.mgmt.network.NetworkSecurityGroup(
             location=module.params.get('region'),
             security_rules=[
-                # azure.mgmt.network.SecurityRule(
-                #     access="Allow",
-                #     description="Some Description",
-                #     destination_address_prefix="*",
-                #     destination_port_range="2888",
-                #     direction="Inbound",
-                #     priority="150",
-                #     protocol="*",
-                #     source_address_prefix="*",
-                #     source_port_range="*",
-                # )
+                azure.mgmt.network.SecurityRule(
+                    access="Allow",
+                    description="Some Description",
+                    destination_address_prefix="*",
+                    destination_port_range="22",
+                    direction="Inbound",
+                    priority="150",
+                    protocol="*",
+                    source_address_prefix="*",
+                    source_port_range="*",
+                )
             ],
         )
     )

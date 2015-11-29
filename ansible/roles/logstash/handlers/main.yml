@@ -1,0 +1,12 @@
+---
+- name: Restart logstash
+  monit:
+    name=logstash
+    state=restarted
+  sudo: yes
+
+- name: Restart supervisor
+  service:
+    name=supervisor
+    enabled=yes state=restarted
+  sudo: yes

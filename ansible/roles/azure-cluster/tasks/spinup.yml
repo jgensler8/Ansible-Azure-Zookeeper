@@ -37,7 +37,7 @@
     region: "{{ region }}"
     virtual_network_name: "{{ virtual_network_name }}"
     subnet_name: "{{ subnet_name }}"
-    # network_security_group_name: "{{ network_security_group_name }}"
+    network_security_group_name: "{{ network_security_group_name }}"
     subscription_id: "{{ azure_subscription_id }}"
     client_id: "{{ azure_client_id }}"
     client_secret: "{{ azure_client_secret }}"

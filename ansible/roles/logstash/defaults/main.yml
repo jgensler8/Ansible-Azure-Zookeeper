@@ -1,0 +1,15 @@
+---
+elk_java:
+  flavor: openjdk
+  oracle:
+    - oracle-java7-installer
+    - oracle-java7-set-default
+  openjdk:
+    - openjdk-7-jre-headless
+
+elk_logstash:
+  version: 2.1
+  pid_file: /var/run/logstash.pid
+  configs:
+    - { src: logstash-simple.conf.j2, dest: simple.conf }
+  patterns: [] # optional; follows same format as `configs`

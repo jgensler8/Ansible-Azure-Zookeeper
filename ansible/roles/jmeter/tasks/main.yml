@@ -14,13 +14,12 @@
   become_method: sudo
 
 - name: download jmeter
-  unarchive:
-    src: "{{ jmeter_src }}"
+  get_url:
+    url: "{{ jmeter_src }}"
     dest: "{{ jmeter_get_url_dest }}"
-    copy: no
 
 - name: unpack jmeter
   unarchive:
-    src: "{{ jmeter_get_url_dest }}"
+    src: "{{ jmeter_get_url_dest_file }}"
     dest: "{{ jmeter_unarchive_dest }}"
     copy: no

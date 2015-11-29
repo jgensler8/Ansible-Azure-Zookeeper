@@ -21,9 +21,9 @@ virtual_network_name: "{{ basename }}-vnet"
 subnet_name: "{{ basename }}-subnet"
 # It turns out that this wasn't needed (I was facing another bug)
 # However, it would be a neat feature to implement!
-# network_security_group_name: "{{ basename }}-network-security-group"
-# security_rules:
-# - somerule to do later
+network_security_group_name: "{{ basename }}-network-security-group"
+security_rules:
+- somerule to do later
 os_disk_name: "{{ basename }}-{{ item }}-os-disk"
 network_interface_name: "{{ basename }}-{{ item }}-net-interface"
 public_ip_name: "{{ basename }}-{{ item }}-ip"

@@ -1,0 +1,13 @@
+---
+- hosts: "{{ jmeter_group }}"
+  remote_user: "{{ admin_username }}"
+  vars_files:
+  - extra_vars/shared.yml
+  roles:
+  - role: logstash
+    elk_logstash:
+      configs:
+      - src: 5-jmeter-results.conf
+        dest: 5-jmeter-results.conf
+    sudo: yes
+  - jmeter

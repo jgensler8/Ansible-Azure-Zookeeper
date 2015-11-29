@@ -1,39 +1,8 @@
 ---
-# - hosts: "{{ jmeter_group }}"
-#   remote_user: "{{ admin_username }}"
-#   vars_files:
-#   - extra_vars/shared.yml
-#   roles:
-#   - role: jmeter-testrun
-#     test_plan:
-#       name: MyTestPlan
-#       variables:
-#       - name: MYNAME
-#         value: MYVALUE
-#       tree:
-#       - type: ThreadGroup
-#         name: MYTHREADGROUP
-#         main_controller:
-#           continue_forever: false
-#           loops: 5
-#         num_threads: 10
-#         ramp_time: 100
-#         tree:
-#         - type: HTTPSamplerProxy
-#           name: MYSAMPLERPROXY
-#           domain: 127.0.0.1
-#           port: 9998
-#           protocol: http
-#           path: /znodes/v1
-#           method: GET
-#           follow_redirects: true
-#           auto_redirects: false
-#           use_keepalive: true
-#           DO_MULTIPAT_POST: false
-#           monitor: false
-
-- hosts: localhost
-  connection: local
+- hosts: "{{ jmeter_group }}"
+  remote_user: "{{ admin_username }}"
+  vars_files:
+  - extra_vars/shared.yml
   roles:
   - role: jmeter-testrun
     jmeter_testrun_root: /tmp
@@ -47,16 +16,16 @@
         name: MYTHREADGROUP
         main_controller:
           continue_forever: false
-          loops: 5
+          loops: 10
         num_threads: 10
-        ramp_time: 100
+        ramp_time: 3
         tree:
         - type: HTTPSamplerProxy
-          name: MYSAMPLERPROXY
-          domain: 127.0.0.1
+          name: ZOOKEEPERREST
+          domain: myzookeeper-1-ip.centralus.cloudapp.azure.com
           port: 9998
           protocol: http
-          path: /znodes/v1
+          path: /znodes/v1/
           method: GET
           follow_redirects: true
           auto_redirects: false

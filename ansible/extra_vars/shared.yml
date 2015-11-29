@@ -16,6 +16,10 @@ zookeeper_cluster_size: 3
 zookeeper_basename: "myzookeeper"
 zookeeper_group: "zookeeper"
 
+elk_cluster_size: 1
+elk_basename: "myelk"
+elk_group: "elk"
+
 jmeter_cluster_size: 1
 jmeter_basename: "myjmeter"
 jmeter_group: "jmeter"

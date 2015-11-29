@@ -1,4 +1,5 @@
 ---
+# zookeeper
 - hosts: localhost
   connection: local
   vars_files:
@@ -17,6 +18,26 @@
     add_host: name={{ item.public_ip._dns_settings._fqdn }} group={{ zookeeper_group }}
     with_items: list_azure_ips.results
 
+# elk
+- hosts: localhost
+  connection: local
+  vars_files:
+  - extra_vars/azure_vars.yml
+  - extra_vars/shared.yml
+  roles:
+  - role: azure-cluster
+    state: "{{ cluster_state }}"
+    basename: "{{ elk_basename }}"
+    cluster_size: "{{ elk_cluster_size }}"
+    group_name: "{{ cluster_group_name }}"
+    virtual_network_name: "{{ cluster_virtual_network_name }}"
+    subnet_name: "{{ cluster_subnet_name }}"
+  tasks:
+  - name: add hosts to inventory
+    add_host: name={{ item.public_ip._dns_settings._fqdn }} group={{ elk_group }}
+    with_items: list_azure_ips.results
+
+# jmeter
 - hosts: localhost
   connection: local
   vars_files:

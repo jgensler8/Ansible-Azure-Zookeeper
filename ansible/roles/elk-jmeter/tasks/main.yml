@@ -1,0 +1,12 @@
+---
+# tasks file for elk-jmeter
+
+- name: make sure config directory exists
+  file:
+    path: "{{ jmeter_result_mapping_dest }}"
+    state: directory
+
+- name: copy jmeter mapping
+  copy:
+    src: "{{ jmeter_result_mapping_file_name }}"
+    dest: "{{ jmeter_result_mapping_dest }}"

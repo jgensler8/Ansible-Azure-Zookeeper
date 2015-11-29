@@ -2,3 +2,10 @@
 - include: "cluster-action.yml"
   vars:
     cluster_state: present
+    
+# TODO: template an intermediate hosts file
+# - host: localhost
+#   connection: local
+#   tasks:
+#   - name: template hosts file
+#     template: src=

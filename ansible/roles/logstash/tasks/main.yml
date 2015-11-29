@@ -1,0 +1,23 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: NEW update the cache
+  apt: update_cache=true
+
+- name: Install common apt packages
+  apt: pkg={{ item }} state=latest
+  with_items: elk_common_packages
+  sudo: yes
+
+- name: Install Java
+  include: java.yml
+
+- name: ES apt GPG key
+  apt_key:
+    url='http://packages.elastic.co/GPG-KEY-elasticsearch'
+  when: ansible_os_family == 'Debian'
+  sudo: yes
+
+- name: Install Logstash
+  include: logstash.yml

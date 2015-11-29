@@ -1,0 +1,33 @@
+---
+- name: ES apt repo
+  apt_repository:
+    repo="deb http://packages.elastic.co/elasticsearch/{{ elk_elasticsearch.deb_version }}/{{ ansible_os_family|lower }} stable main"
+    update_cache=yes
+  when: ansible_os_family == 'Debian'
+  sudo: yes
+
+- name: Install ES apt packages
+  apt: pkg=elasticsearch update_cache=yes state=latest
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+  notify: Restart elasticsearch
+
+- name: Curator PIP package
+  pip: name=elasticsearch-curator state=latest
+  sudo: yes
+
+- name: ES config file
+  template:
+    src=elasticsearch.yml.j2
+    dest=/etc/elasticsearch/elasticsearch.yml
+    owner=root group=root mode=644
+  sudo: yes
+  notify: Restart elasticsearch
+
+- name: Make monit to look after ES
+  template:
+    src=elasticsearch.monitrc.conf.j2
+    dest=/etc/monit/conf.d/elasticsearch.monitrc.conf
+    owner=root group=root mode=644
+  sudo: yes
+  notify: Restart monit

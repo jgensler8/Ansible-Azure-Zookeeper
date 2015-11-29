@@ -6,7 +6,7 @@
     dest: "{{ jmeter_testrun_root }}/jmx_base.jmx"
 
 - name: run jmeter
-  command: echo "running jmeter"
+  command: /tmp/apache-jmeter-2.13/bin/jmeter -n -t /tmp/jmx_base.jmx -l /tmp/results.csv
 
-- name: log jmeter to somewhere
+- name: restart logstash?
   command: echo "logging to logstash"

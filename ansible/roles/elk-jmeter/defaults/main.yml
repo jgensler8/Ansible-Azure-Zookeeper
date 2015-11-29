@@ -1,0 +1,5 @@
+---
+# defaults file for elk-jmeter
+
+jmeter_result_mapping_file_name: jmeter-results-mapping.json
+jmeter_result_mapping_dest: /usr/share/elasticsearch/config

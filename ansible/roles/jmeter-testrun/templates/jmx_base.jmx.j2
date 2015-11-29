@@ -44,6 +44,18 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
+          <boolProp name="HTTPSampler.postBodyRaw">{{ element.postBodyRaw}}</boolProp>
+          {% if element.postBodyRaw %}
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">{{ element.encodeBody }}</boolProp>
+                <stringProp name="Argument.value">{{ element.body }}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          {% endif %}
           <stringProp name="HTTPSampler.domain">{{ element.domain }}</stringProp>
           <stringProp name="HTTPSampler.port">{{ element.port }}</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
@@ -59,6 +71,20 @@
           <boolProp name="HTTPSampler.monitor">{{ element.monitor }}</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
         </HTTPSamplerProxy>
+        <hashTree>
+          {{ loop(element.tree) }}
+        </hashTree>
+        {% elif element.type == "HeaderManager" %}
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="{{ element.name }}" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            {% for header in element.headers %}
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">{{ header.name }}</stringProp>
+              <stringProp name="Header.value">{{ header.value }}</stringProp>
+            </elementProp>
+            {% endfor %}
+          </collectionProp>
+        </HeaderManager>
         {% endif %}
       {% endfor %}
     </hashTree>

@@ -17,7 +17,7 @@
         main_controller:
           continue_forever: false
           loops: 10
-        num_threads: 10
+        num_threads: 20
         ramp_time: 10
         tree:
         - type: HTTPSamplerProxy
@@ -25,10 +25,38 @@
           domain: myzookeeper-1-ip.centralus.cloudapp.azure.com
           port: 9998
           protocol: http
-          path: /znodes/v1/
-          method: GET
+          path: /znodes/v1/?op=create&amp;name=request-${__threadNum}&amp;dataformat=utf8
+          method: POST
+          postBodyRaw: true
+          encodeBody: false
+          body: data-${__threadNum}
           follow_redirects: true
           auto_redirects: false
           use_keepalive: true
           DO_MULTIPAT_POST: false
           monitor: false
+          tree:
+          - type: HeaderManager
+            name: RESTHEADERMANAGER
+            headers:
+            - name: Content-Type
+              value: application/octet-stream
+        - type: HTTPSamplerProxy
+          name: ZOOKEEPERREST
+          domain: myzookeeper-1-ip.centralus.cloudapp.azure.com
+          port: 9998
+          protocol: http
+          path: /znodes/v1/request-${__threadNum}
+          method: DELETE
+          postBodyRaw: false
+          follow_redirects: true
+          auto_redirects: false
+          use_keepalive: true
+          DO_MULTIPAT_POST: false
+          monitor: false
+          tree:
+          - type: HeaderManager
+            name: RESTHEADERMANAGER
+            headers:
+            - name: Content-Type
+              value: application/octet-stream

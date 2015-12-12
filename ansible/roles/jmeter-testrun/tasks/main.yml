@@ -16,8 +16,9 @@
     src: "user.properties.j2"
     dest: "/tmp/user.properties"
 
+- name: update the max JVM ram to use
+  
+
 - name: run jmeter
   command: "{{ jmeter_executable }} -n -t /tmp/jmx_base.jmx -p /tmp/user.properties -l /tmp/results.csv"
-  environment:
-    JVM_ARGS: -Xmx4g
   notify: Restart logstash

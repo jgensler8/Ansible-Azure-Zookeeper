@@ -1,63 +1,23 @@
-# Zookeeper on Azure
+# CS 441: Cloud Computing
 
-## Why?
+## Course Project: Scaling Zookeeper on Microsoft Azure
 
-This project is for my Cloud Computing class at UIC. I am writing JMeter tests and Ansible deployment logic to learn more about infrastructure in the cloud.
-
-See [their wiki page ](https://cwiki.apache.org/confluence/display/ZOOKEEPER/ServiceLatencyOverview) on some of the metrics that they have gathered.
-
-## Objectives
-
-- [ ] Write and Deploy Zookeeper with Ansible
-- [ ] Write preliminary metric gathering in JMeter
-- [ ] Write monitoring logic to scale Zookeeper based on performance metrics
-
-## Running
-
-The Ansible directory contains serveral useful scripts to test the application.
-
-### Dependencies
-
-* Ansible compatible azure install (pip module 1.0.2 should do)
-* Azure project setup. [Here](https://azure-sdk-for-python.readthedocs.org/en/latest/resourcemanagementauthentication.html) is the guide.
-  Specifically, you will need:
-  * Subscription ID (from online portal)
-  * OAuth endpoint (from online portal)
-  * Client ID (from `azure account list`)
-  * Client Secret (password used to log in to account using azure-cli)
-
-### Playbooks
-
-#### main.yml
-
-The *whole* package. I don't recommend using this but :wink:.
-
-#### spinup.yml
-
-Brings up a ZK cluster in Azure.
-
-#### spindown.yml
-
-#### run-jmeter.yml
-
-### Steps
-
-#### 1. Edit `groupvars/all.yml`
-
-```yaml
-# inside file
+This first phase was to figure out how an application responds to load. The second phase was to use that data to integrate your application with the scaling features provided by Azure.
 
 ---
-azure_subscription_id: "..."
-azure_client_id: "..."
-azure_client_secret: "..."
-```
-#### 2. Encrypt `groupvars/all.yml`
 
-```bash
-$ ansible-vault encrypt groupvars/all.yml
-``
+### What Is Included
 
-## Notes
+There are two directories: `/ansible` and `/azure-service`. They are a result of the two phases of the course project.
 
-Ansible's [azure module](http://docs.ansible.com/ansible/azure_module.html) is compatible with an older version of the azure package on pip. I have (hastily) written a new module to interface with [azure 1.0.2](https://pypi.python.org/pypi/azure/1.0.2)
+#### ansible
+
+There is a README in that directory describing what is needed to test out the Ansible work. Overall, there are scripts to spin up a Zookeeper cluster of a specified size, a node with ELK stack for data collection and visualization, and a node to run the JMeter tests from.
+
+#### azure-service (incomplete)
+
+There is a README in that directory describing what is needed to test out the Azure Service. Overall, this spins up a three node cluster AFTER the user has created a service. Almost all of this work is done though Eclipse's Azure plugin.
+
+#### Report.pdf
+
+I have detailed the results of my load tests and written about the goals of this project.

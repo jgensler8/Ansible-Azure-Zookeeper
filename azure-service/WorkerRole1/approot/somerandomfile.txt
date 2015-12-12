@@ -1,0 +1,13 @@
+tickTime=2000
+dataDir={{ zookeeper_data_dir }}
+clientPort=2181
+initLimit=5
+syncLimit=2
+hostname={{ inventory_hostname }}
+{% for name in groups[ zookeeper_group ] %}
+{% if name == inventory_hostname %}
+server.{{ loop.index }}=0.0.0.0:2888:3888
+{% else %}
+server.{{ loop.index }}={{ name }}:2888:3888
+{% endif %}
+{% endfor %}

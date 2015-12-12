@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><ServiceConfiguration xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" serviceName="AzureDeploymentProject">
+  <Role name="WorkerRole1">
+    <Instances count="3"/>
+    <ConfigurationSettings>
+      
+      
+      <!-- NOTE: replace the following settings with your own -->
+      
+      
+      
+    <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true"/>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true"/>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="azureadmin"/>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBGgYJKoZIhvcNAQcDoIIBCzCCAQcCAQAxgcwwgckCAQAwMjAeMRwwGgYDVQQDExNXaW5kb3dzIEF6dXJlIFRvb2xzAhAvIxjYat0ZmkBDXita+svWMA0GCSqGSIb3DQEBAQUABIGAItktsxqvnUFXQIhkCixFsEMfIKCfkLdsSQrHgqLYJbcx8oOJcWWlv/91eq2+fsMBNJcShN45Q1nB1K840xrPdEFpJu0q/jQTsDXAkWrbSYFqgwtHEcuHorToLxvqtc0Y2q5vEe9gVD402/tnQpsR4xPl/rLQ4nyfZbYAmHB5pwEwMwYJKoZIhvcNAQcBMBQGCCqGSIb3DQMHBAg/AvBOs1t2zIAQ84SZJqZnIjO0pyiAtBTmnQ=="/>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2016-12-10T23:59:59.0000000-08:00"/>
+    </ConfigurationSettings>
+    <Certificates>
+      
+      
+    <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="875F1656A34D93B266E71BF19C116C39F16B6987" thumbprintAlgorithm="sha1"/>
+    </Certificates>
+  </Role>
+</ServiceConfiguration>
